@@ -1,0 +1,38 @@
+[package]
+name = "csview"
+version = "1.1.0"
+authors = ["Wenxuan Zhang <wenxuangm@gmail.com>"]
+description="A high performance csv viewer with cjk/emoji support."
+categories = ["command-line-utilities"]
+homepage = "https://github.com/wfxr/csview"
+keywords = [
+    "csv",
+    "pager",
+    "viewer",
+    "tool",
+]
+readme = "README.md"
+license = "MIT/Apache-2.0"
+exclude = ["/completions"]
+repository = "https://github.com/wfxr/csview"
+edition = "2021"
+build = "build.rs"
+
+[dependencies]
+csv = "1.1"
+clap = { version = "3", features = ["wrap_help", "derive"] }
+strum = { version = "0.24", features = ["derive"] }
+exitcode = "1.1"
+anyhow = "1.0"
+unicode-width = "0"
+unicode-truncate = "0"
+itertools = "0.10"
+
+[build-dependencies]
+clap = { version = "3", features = ["wrap_help", "derive"] }
+clap_complete = "3"
+strum = { version = "0.24", features = ["derive"] }
+
+[profile.release]
+lto = true
+codegen-units = 1
