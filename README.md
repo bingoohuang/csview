@@ -8,7 +8,7 @@ fork from [rust csview](https://github.com/wfxr/csview) 源码阅读目的
 * Memory efficient.
 * Correctly align [CJK](https://en.wikipedia.org/wiki/CJK_characters) and emoji characters.
 * Support `tsv` and custom delimiters.
-* Support different styles, including markdown table.
+* Support different styles, including Markdown table.
 
 ## Usage
 
