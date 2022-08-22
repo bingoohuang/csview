@@ -135,7 +135,7 @@ mod test {
     fn test_write() -> Result<()> {
         let text = "a,b,c\n1,2,3\n4,5,6";
         let rdr = ReaderBuilder::new().has_headers(true).from_reader(text.as_bytes());
-        let wtr = Table::new(rdr, 3, false, 0)?;
+        let wtr = Table::new(rdr, 3, false)?;
 
         let mut buf = Vec::new();
         wtr.writeln(&mut buf, &Style::default())?;
@@ -159,7 +159,7 @@ mod test {
     fn test_write_without_padding() -> Result<()> {
         let text = "a,b,c\n1,2,3\n4,5,6";
         let rdr = ReaderBuilder::new().has_headers(true).from_reader(text.as_bytes());
-        let wtr = Table::new(rdr, 3, false, 0)?;
+        let wtr = Table::new(rdr, 3, false)?;
         let fmt = StyleBuilder::default().padding(0).build();
 
         let mut buf = Vec::new();
@@ -184,7 +184,7 @@ mod test {
     fn test_write_with_indent() -> Result<()> {
         let text = "a,b,c\n1,2,3\n4,5,6";
         let rdr = ReaderBuilder::new().has_headers(true).from_reader(text.as_bytes());
-        let wtr = Table::new(rdr, 3, false, 0)?;
+        let wtr = Table::new(rdr, 3, false)?;
         let fmt = StyleBuilder::default().indent(4).build();
 
         let mut buf = Vec::new();
@@ -209,7 +209,7 @@ mod test {
     fn test_only_header() -> Result<()> {
         let text = "a,ab,abc";
         let rdr = ReaderBuilder::new().has_headers(true).from_reader(text.as_bytes());
-        let wtr = Table::new(rdr, 3, false, 0)?;
+        let wtr = Table::new(rdr, 3, false)?;
         let fmt = Style::default();
 
         let mut buf = Vec::new();
@@ -230,7 +230,7 @@ mod test {
     fn test_without_header() -> Result<()> {
         let text = "1,123,35\n383,2, 17";
         let rdr = ReaderBuilder::new().has_headers(false).from_reader(text.as_bytes());
-        let wtr = Table::new(rdr, 3, false, 0)?;
+        let wtr = Table::new(rdr, 3, false)?;
         let fmt = StyleBuilder::new()
             .col_sep('│')
             .row_seps(
@@ -260,7 +260,7 @@ mod test {
     fn test_with_seq() -> Result<()> {
         let text = "a,b,c\n1,2,3\n4,5,6";
         let rdr = ReaderBuilder::new().has_headers(true).from_reader(text.as_bytes());
-        let wtr = Table::new(rdr, 3, true, 0)?;
+        let wtr = Table::new(rdr, 3, true)?;
 
         let mut buf = Vec::new();
         wtr.writeln(&mut buf, &Style::default())?;
