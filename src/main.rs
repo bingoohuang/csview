@@ -65,7 +65,6 @@ fn try_main() -> anyhow::Result<()> {
         padding,
         indent,
         sniff,
-        limit,
     } = App::parse();
 
     let stdout = io::stdout();
@@ -79,7 +78,7 @@ fn try_main() -> anyhow::Result<()> {
         });
 
     let sniff = if sniff == 0 { usize::MAX } else { sniff };
-    let table = Table::new(rdr, sniff, number, limit)?;
+    let table = Table::new(rdr, sniff, number)?;
     table.writeln(wtr, &table_style(style, padding, indent))?;
     Ok(())
 }

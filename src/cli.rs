@@ -42,12 +42,8 @@ pub struct App {
     pub indent: usize,
 
     /// Limit column widths sniffing to the specified number of rows. Specify "0" to cancel limit.
-    #[clap(long, default_value_t = 1000, name = "LIMIT")]
+    #[clap(long, default_value_t = 10, name = "LIMIT")]
     pub sniff: usize,
-
-    /// Limit the max lines to view. Specify "0" to cancel limit.
-    #[clap(long, default_value_t = 10, name = "ROWS")]
-    pub limit: usize,
 }
 
 #[derive(Display, EnumString, EnumVariantNames)]

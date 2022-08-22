@@ -1,15 +1,16 @@
-mod row;
-mod style;
-
-use csv::{Reader, StringRecord};
-use row::Row;
 use std::{
     io::{self, Result, Write},
     iter,
 };
+
+use csv::{Reader, StringRecord};
 use unicode_width::UnicodeWidthStr;
 
+use row::Row;
 pub use style::{RowSep, Style, StyleBuilder};
+
+mod row;
+mod style;
 
 pub struct Table {
     header:   Option<StringRecord>,
@@ -20,16 +21,11 @@ pub struct Table {
 }
 
 impl Table {
-    pub(crate) fn new<R: 'static + io::Read>(
-        mut rdr: Reader<R>,
-        sniff_rows: usize,
-        with_seq: bool,
-        limit: usize,
-    ) -> Result<Self> {
+    pub(crate) fn new<R: 'static + io::Read>(mut rdr: Reader<R>, sniff_rows: usize, with_seq: bool) -> Result<Self> {
         let header = rdr.has_headers().then(|| rdr.headers()).transpose()?.cloned();
         let (widths, buf) = sniff_widths(&mut rdr, header.as_ref(), sniff_rows, with_seq)?;
         let records = Box::new(buf.into_iter().map(Ok).chain(rdr.into_records()));
-        Ok(Self { header, widths, records, with_seq, limit })
+        Ok(Self { header, widths, records, with_seq, limit: sniff_rows })
     }
 
     pub(crate) fn writeln<W: Write>(self, wtr: &mut W, fmt: &Style) -> Result<()> {
@@ -57,9 +53,11 @@ impl Table {
         }
 
         let mut seq = 0;
+        let mut reach_limit = false;
         while let Some(record) = iter.next().transpose()? {
             seq += 1;
             if self.limit > 0 && seq > self.limit {
+                reach_limit = true;
                 break;
             }
             let seq_str = seq.to_string();
@@ -80,6 +78,9 @@ impl Table {
             .map(|sep| fmt.write_row_sep(wtr, widths, &sep))
             .transpose()?;
 
+        if reach_limit {
+            write!(wtr, "# limit to {} rows, change it by --sniff <LIMIT>", self.limit)?;
+        }
         wtr.flush()
     }
 }
@@ -117,9 +118,10 @@ fn update_widths<S: AsRef<str>>(record: &StringRecord, widths: &mut Vec<usize>, 
 
 #[cfg(test)]
 mod test {
-    use super::*;
     use anyhow::Result;
     use csv::ReaderBuilder;
+
+    use super::*;
 
     macro_rules! gen_table {
         ($($line:expr)*) => {
