@@ -13,7 +13,7 @@ fork from [rust csview](https://github.com/wfxr/csview) 源码阅读目的
 ## Usage
 
 ```sh
-$ cat <<EOF >>example.csv
+$ cat <<'EOF' >>example.csv
 Year,Make,Model,Description,Price
 1997,Ford,E350,"ac, abs, moon",3000.00
 1999,Chevy,"Venture ""Extended Edition""","",4900.00
